@@ -1,5 +1,4 @@
 const Producto = require('../models/producto');
-const Carrito = require('../models/carrito');
 
 exports.getProductos = (req, res) => {
     Producto.fetchAll()
@@ -42,51 +41,29 @@ exports.getIndex = (req, res) => {
         })
         .catch(err => console.log(err));
 }
-/*
+
 exports.getCarrito = (req, res, next) => {
     req.usuario
         .getCarrito()
-        .then(carrito => {
-            return carrito
-                .getProductos()
-                .then(productos => {
-                    res.render('tienda/carrito', {
-                        path: '/carrito',
-                        titulo: 'Mi Carrito',
-                        productos: productos
-                    });
-                })
+        .then(productos => {
+            res.render('tienda/carrito', {
+                path: '/carrito',
+                titulo: 'Mi Carrito',
+                productos: productos
+            });
         })
         .catch(err => console.log(err));
 };
 
 exports.postCarrito = (req, res) => {
     const idProducto = req.body.idProducto;
-    let micarrito;
-    let nuevaCantidad = 1;
-    req.usuario
-        .getCarrito()
-        .then(carrito => {
-            micarrito = carrito;
-            return carrito.getProductos({ where: { id: idProducto } });
-        })
-        .then(productos => {
-            let producto;
-            if (productos.length > 0) {
-                producto = productos[0];
-            }
-            if (producto) {
-                nuevaCantidad = producto.carritoItem.cantidad + 1;
-                return producto;
-            }
-            return Producto.findByPk(idProducto);
-        })
+
+    Producto.findById(idProducto)
         .then(producto => {
-            return micarrito.addProducto(producto, {
-                through: { cantidad: nuevaCantidad }
-            });
+            return req.usuario.agregarAlCarrito(producto);
         })
-        .then(() => {
+        .then(result => {
+            console.log(result);
             res.redirect('/carrito');
         })
         .catch(err => console.log(err));
@@ -94,12 +71,14 @@ exports.postCarrito = (req, res) => {
 
 exports.postEliminarProductoCarrito = (req, res, next) => {
     const idProducto = req.body.idProducto;
-    Producto.findById(idProducto, producto => {
-        Carrito.eliminarProducto(idProducto, producto.precio);
-        res.redirect('/carrito');
-    });
-};
+    req.usuario.deleteItemDelCarrito(idProducto)
+        .then(result => {
+            res.redirect('/carrito');
+        })
+        .catch(err => console.log(err));
 
+};
+/*
 exports.getPedidos = (req, res, next) => {
     req.usuario
         .getPedidos({include: ['productos']})

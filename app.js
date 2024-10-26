@@ -25,7 +25,7 @@ app.use((req, res, next) => {
     // id de usuario creado en Mongo Atlas: 671c432403f36d5f18a242b4
     Usuario.findById('671c432403f36d5f18a242b4')
         .then(usuario => {
-            req.usuario = usuario;
+            req.usuario = new Usuario(usuario.nombre, usuario.email, usuario.carrito, usuario._id);
             next();
         })
         .catch(err => console.log(err));
