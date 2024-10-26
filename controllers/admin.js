@@ -9,28 +9,20 @@ exports.getCrearProducto = (req, res) => {
 };
 
 exports.postCrearProducto = (req, res) => {
-
     const nombre = req.body.nombre;
     const urlImagen = req.body.urlImagen;
     const precio = req.body.precio;
     const descripcion = req.body.descripcion;
-    req.usuario
-        .createProducto({
-            nombre: nombre,
-            precio: precio,
-            urlImagen: urlImagen,
-            descripcion: descripcion
+    const producto = new Producto(nombre, precio, descripcion, urlImagen);
+    producto.save()
+        .then(result => {
+            console.log(result);
+            res.redirect('/admin/productos');
         })
-        .then(
-            result => {
-                console.log(result);
-                res.redirect('/');
-            })
         .catch(err => console.log(err));
 };
-
+/*
 exports.getEditarProducto = (req, res) => {
-
     const modoEdicion = req.query.editar;
     const idProducto = req.params.idProducto;
     Producto.findByPk(idProducto)
@@ -46,7 +38,7 @@ exports.getEditarProducto = (req, res) => {
             })
         })
         .catch(err => console.log(err));
-}
+} 
 
 
 exports.postEditarProducto = (req, res, next) => {
@@ -69,23 +61,23 @@ exports.postEditarProducto = (req, res, next) => {
         })
         .catch(err => console.log(err));
 
-};
+}; */
 
 
 
 exports.getProductos = (req, res) => {
-    req.usuario.getProductos()
+    Producto.fetchAll()
         .then(productos => {
             res.render('admin/productos', {
                 prods: productos,
                 titulo: "Administracion de Productos",
                 path: "/admin/productos"
             });
-
         })
         .catch(err => console.log(err));
 };
 
+/*
 exports.postEliminarProducto = (req, res, next) => {
     const idProducto = req.body.idProducto;
     Producto.findByPk(idProducto)
@@ -97,4 +89,4 @@ exports.postEliminarProducto = (req, res, next) => {
             res.redirect('/admin/productos');
         })
         .catch(err => console.log(err));
-};
+}; */

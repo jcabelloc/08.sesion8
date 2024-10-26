@@ -10,15 +10,15 @@ router.get('/productos', tiendaController.getProductos);
 
 router.get('/productos/:idProducto', tiendaController.getProducto);
 
-router.get('/carrito', tiendaController.getCarrito);
+// router.get('/carrito', tiendaController.getCarrito);
 
-router.post('/carrito', tiendaController.postCarrito);
+// router.post('/carrito', tiendaController.postCarrito);
 
-router.post('/eliminar-producto-carrito', tiendaController.postEliminarProductoCarrito);
+// router.post('/eliminar-producto-carrito', tiendaController.postEliminarProductoCarrito);
 
-router.get('/pedidos', tiendaController.getPedidos);
+// router.get('/pedidos', tiendaController.getPedidos);
 
-router.post('/crear-pedido', tiendaController.postPedido);
+// router.post('/crear-pedido', tiendaController.postPedido);
 
 
 
