@@ -9,6 +9,7 @@ const mongoConnect = database.mongoConnect;
 const adminRoutes = require('./routes/admin')
 const tiendaRoutes = require('./routes/tienda')
 const errorController = require('./controllers/error');
+const Usuario = require('./models/usuario');
 
 const app = express();
 
@@ -21,8 +22,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
-    next();
-})
+    // id de usuario creado en Mongo Atlas: 671c432403f36d5f18a242b4
+    Usuario.findById('671c432403f36d5f18a242b4')
+        .then(usuario => {
+            req.usuario = usuario;
+            next();
+        })
+        .catch(err => console.log(err));
+
+});
 
 app.use('/admin', adminRoutes);
 app.use(tiendaRoutes);
