@@ -78,10 +78,10 @@ exports.postEliminarProductoCarrito = (req, res, next) => {
         .catch(err => console.log(err));
 
 };
-/*
+
 exports.getPedidos = (req, res, next) => {
     req.usuario
-        .getPedidos({include: ['productos']})
+        .getPedidos()
         .then(pedidos => {
             res.render('tienda/pedidos', {
                 path: '/pedidos',
@@ -96,31 +96,9 @@ exports.getPedidos = (req, res, next) => {
 
 
 exports.postPedido = (req, res, next) => {
-    let micarrito;
-    req.usuario
-      .getCarrito()
-      .then(carrito => {
-        micarrito = carrito;
-        return carrito.getProductos();
-      })
-      .then(productos => {
-        return req.usuario
-          .createPedido()
-          .then(pedido => {
-            return pedido.addProductos(
-              productos.map(producto => {
-                producto.pedidoItem = { cantidad: producto.carritoItem.cantidad };
-                return producto;
-              })
-            );
-          })
-          .catch(err => console.log(err));
-      })
-      .then(result => {
-        return micarrito.setProductos(null);
-      })
-      .then(result => {
-        res.redirect('/pedidos');
-      })
-      .catch(err => console.log(err));
-  }; */
+    req.usuario.agregarPedido()
+        .then(result => {
+            res.redirect('/pedidos');
+        })
+        .catch(err => console.log(err));
+}; 
