@@ -21,14 +21,14 @@ exports.postCrearProducto = (req, res) => {
         })
         .catch(err => console.log(err));
 };
-/*
+
 exports.getEditarProducto = (req, res) => {
     const modoEdicion = req.query.editar;
     const idProducto = req.params.idProducto;
-    Producto.findByPk(idProducto)
+    Producto.findById(idProducto)
         .then(producto => {
             if (!producto) {
-                return res.redirect('/');
+                return res.redirect('admin/productos');
             }
             res.render('admin/editar-producto', {
                 titulo: 'Editar Producto',
@@ -47,21 +47,14 @@ exports.postEditarProducto = (req, res, next) => {
     const precio = req.body.precio;
     const urlImagen = req.body.urlImagen;
     const descripcion = req.body.descripcion;
-    Producto.findByPk(idProducto)
-        .then(producto => {
-            producto.nombre = nombre;
-            producto.precio = precio;
-            producto.urlImagen = urlImagen;
-            producto.descripcion = descripcion;
-            return producto.save();
-        })
+    const producto = new Producto(nombre, precio, descripcion, urlImagen, idProducto)
+    producto.save()
         .then(result => {
             console.log('Producto actualizado satisfactoriamente');
             res.redirect('/admin/productos');
         })
         .catch(err => console.log(err));
-
-}; */
+}; 
 
 
 
@@ -77,16 +70,13 @@ exports.getProductos = (req, res) => {
         .catch(err => console.log(err));
 };
 
-/*
+
 exports.postEliminarProducto = (req, res, next) => {
     const idProducto = req.body.idProducto;
-    Producto.findByPk(idProducto)
-        .then(producto => {
-            return producto.destroy();
-        })
+    Producto.deleteById(idProducto)
         .then(result => {
             console.log('Producto eliminado satisfactoriamente');
             res.redirect('/admin/productos');
         })
         .catch(err => console.log(err));
-}; */
+}; 
